@@ -1,85 +1,85 @@
-# Mobile Challenge 20240202
+# Mobile Dictionary App
 
-## Introdução
+Este é um aplicativo voltado para pessoas que desejam aprender novas palavras em inglês.
+Com ele você pode pesquisar por palavras, ver definições e salvar palavras favoritas.
+Viu uma palavra mas esqueceu de salvar? O histórico de palavras pesquisadas está disponível para você!
 
-Este é um teste para que possamos ver as suas habilidades como Mobile Developer.
+# Layout proposto
 
-Nesse desafio você deverá desenvolver um aplicativo para listar palavras em inglês, utilizando como base a API [Free Dictionary API](https://dictionaryapi.dev/). O projeto a ser desenvolvido por você tem como objetivo exibir termos em inglês e gerenciar as palavras visualizadas, conforme indicado nos casos de uso que estão logo abaixo.
+Utilizando como base o wireframe fornecido, foi desenvolvido um protótipo utilizando o Figma que pode ser acessado livremente através do link abaixo:
 
-[SPOILER] As instruções de entrega e apresentação do challenge estão no final deste Readme (=
+[![Visualizar layout no Figma](https://img.shields.io/badge/Figma-Visualizar%20prot%C3%B3tipo-F24E1E?logo=figma&logoColor=white&style=for-the-badge)](https://www.figma.com/proto/6jJu9wbNM2kxY0xC6hr2q0/Untitled?node-id=1-2&t=5jkEwtcq7yEhYexm-1)
 
-### Antes de começar
- 
-- Considere como deadline da avaliação a partir do início do teste. Caso tenha sido convidado a realizar o teste e não seja possível concluir dentro deste período, avise a pessoa que o convidou para receber instruções sobre o que fazer.
-- Documentar todo o processo de investigação para o desenvolvimento da atividade (README.md no seu repositório); os resultados destas tarefas são tão importantes do que o seu processo de pensamento e decisões à medida que as completa, por isso tente documentar e apresentar os seus hipóteses e decisões na medida do possível.
+# Inicializando o projeto
 
-### Instruções iniciais obrigatórias
+>[!NOTE]
+Tenha certeza de seguir o passo a passo para efetuar o [setup do ambiente de desenvolvimento para o react native](https://reactnative.dev/docs/set-up-your-environment) antes de começar.
 
-- Utilize as seguintes tecnologias:
+## Passo 1: Instalar dependências do projeto
+Para instalar as dependências do projeto, execute o comando abaixo na raiz do projeto:
+```sh
+# Usando npm
+npm install
+# OU usando Yarn
+yarn start
+```
+## Passo 2: Inicializar o Metro
+Para inicializar o Metro, execute o comando abaixo na raiz do projeto:
 
-#### Tecnologias (Mobile):
-- Nativo ou Hibrido (Flutter, Ionic, React Native, etc)
-- Estilização (Material, Semantic, etc). Ou escrever o seu próprio sob medida 👌
-- Gestão de dados (Redux, Context API, IndexedDB, SQLite, etc)
+```sh
+# Using npm
+npm start
 
-Atente-se, ao desenvolver a aplicação mobile, para conceitos de usabilidade e adeque a interface com elementos visuais para os usuários do seu sistema.
+# OR using Yarn
+yarn start
+```
 
-#### Tecnologias (Back-End):
-- Firebase, Supabase, etc
+## Passo 3: Build e execução do app
+A depender do sistema operacional, você pode optar por efetuar o build e execução do app em um emulador ou dispositivo físico.
 
-#### Organização:
-- Aplicação de padrões Clean Code
-- Validação de chamadas assíncronas para evitar travamentos
 
-### Modelo de Dados:
+### Android
+A opção mais amplamente suportada é o uso do Android Studio para emular um dispositivo Android.
 
-Conforme indicado na documentação da API, a API retorna as informações de uma palavra, tais como etimologia, sinônimos, exemplos de uso, etc. Utilize os campos indicados na documentação dos endpoints para obter os dados necessários.
- 
-### Front-End:
+Uma vez que o emulador esteja configurado (de acordo com a seção [Inicializando o projeto](#inicializando-o-projeto)), você pode executar o comando abaixo para iniciar o app no emulador:
+```sh
+# Using npm
+npm run android
 
-Nessa etapa você deverá desenvolver uma aplicação móvel nativa ou hibrida para consumir a API do desafio.
+# OR using Yarn
+yarn android
+```
 
-**Obrigatório 1** - Você deverá atender aos seguintes casos de uso:
+### iOS
 
-- Como usuário, devo ser capaz de visualizar uma lista de palavras com rolagem infinita
-- Como usuário, devo ser capaz de visualizar uma palavra, significados e a fonética
-- Como usuário, devo ser capaz de salvar a palavra como favorito
-- Como usuário, devo ser capaz de remover a palavra como favorito
-- Como usuário, devo ser capaz de visitar uma lista com as palavras que já vi anteriormente
+Caso esteja executando o projeto em um ambiente MAC OS, você pode optar por utilizar o Xcode para emular um dispositivo IOS.
 
-A API não possui endpoint com a lista de palavras. Essa lista pode ser carregada em memória ou ser salva em banco de dados local ou remoto (por exemplo, com Firebase). Será necessário usar o [arquivo existente dentro do projeto no Github](https://github.com/dwyl/english-words/blob/master/words_dictionary.json).
+#### Setup do Cocoapods
+Para tal é necessário instalar o Cocoapods, que é um gerenciador de dependências para projetos IOS.
+<!-- Seção para instalação do homebrew, watchman, do cocoapods, todos devem ser documentados em seções separadas -->
 
-**Obrigatório 2** - Salvar em cache o resultado das requisições, para agilizar a resposta em caso de buscas com parâmetros repetidos.
+Lembre de instalar as dependências do Cocoapods sempre que clonar o projeto ou atualizar dependências nativas.
 
-**Obrigatório 3** - Seguir o wireframe para a página de listagem dos dados. Pode-se alterar a posição dos itens, mantendo as funcionalidades solicitadas.
+Caso seja a primeira vez que estiver instalando as dependências do projeto, é recomendado que utilize o bundler do ruby para usar versões compatíveis com a versão atual do react native.
 
-<img src="./img/wireframe.png" width="100%" />
+```sh
+bundle install
+```
 
-**Diferencial 1** - Implementar um tocador de audio utilizando, por exemplo, https://responsivevoice.org/api ou recursos nativos;
+E então, para cada vez que instalar ou atualizar dependências nativas, execute o comando abaixo:
 
-**Diferencial 2** - Utilizar alguma ferramenta de Injeção de Dependência;
+```sh
+bundle exec pod install
+```
 
-**Diferencial 3** - Escrever Unit Tests ou E2E Test. Escolher a melhor abordagem e biblioteca;
+Para mais informacões [Leia a documentação do cocoapods](https://guides.cocoapods.org/using/getting-started.html).
 
-**Diferencial 4** - Implementar login com usuário e senha e associar os favoritos e histórico ao ID do usuário, salvando essa informação em banco de dados local ou remoto
-## Readme do Repositório
+#### Inicialização do app
 
-- Deve conter o título do projeto
-- Uma descrição sobre o projeto em frase
-- Deve conter uma lista com linguagem, framework e/ou tecnologias usadas
-- Como instalar e usar o projeto (instruções)
-- Não esqueça o [.gitignore](https://www.toptal.com/developers/gitignore)
-- Se está usando github pessoal, referencie que é um challenge by coodesh:  
+```sh
+# Usando npm
+npm run ios
 
->  This is a challenge by [Coodesh](https://coodesh.com/)
-
-## Finalização e Instruções para a Apresentação
-
-1. Adicione o link do repositório com a sua solução no teste
-2. Adicione o link da apresentação do seu projeto no README.md.
-3. Verifique se o Readme está bom e faça o commit final em seu repositório;
-4. Envie e aguarde as instruções para seguir. Sucesso e boa sorte. =)
-
-## Suporte
-
-Use a [nossa comunidade](https://discord.gg/rdXbEvjsWu) para tirar dúvidas sobre o processo ou envie uma mensagem diretamente a um especialista no chat da plataforma. 
+# Ou usando yarn
+yarn ios
+```
