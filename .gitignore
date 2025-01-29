@@ -163,12 +163,8 @@ vendor/
 # [Experimental] Generated TS type definitions
 /packages/react-native/types_generated/
 
-google-services.json
-google-services-debug.json
-google-services-staging.json
 debug.keystore
 release.keystore
-GoogleService-Info.plist
 android/app/.cxx
 android/app/build
 android/build
