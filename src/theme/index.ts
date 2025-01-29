@@ -24,32 +24,7 @@ const borderRadius = {
   xl: 24,
   full: '50%',
 };
-type FontWeight =
-  | 'normal'
-  | 'black'
-  | 'bold'
-  | '100'
-  | '200'
-  | '300'
-  | '400'
-  | '500'
-  | '600'
-  | '700'
-  | '800'
-  | '900'
-  | 100
-  | 200
-  | 300
-  | 400
-  | 500
-  | 600
-  | 700
-  | 800
-  | 900
-  | 'ultralight'
-  | 'thin'
-  | 'light'
-  | undefined;
+type FontWeight = "bold" | "normal" | "100" | "200" | "300" | "400" | "500" | "600" | "700" | "800" | "900"
 
 type Font = {
   fontFamily: string;
