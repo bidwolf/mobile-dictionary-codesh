@@ -4,6 +4,8 @@ Este é um aplicativo voltado para pessoas que desejam aprender novas palavras e
 Com ele você pode pesquisar por palavras, ver definições e salvar palavras favoritas.
 Viu uma palavra mas esqueceu de salvar? O histórico de palavras pesquisadas está disponível para você!
 
+>  This is a challenge by [Coodesh](https://coodesh.com/)
+
 # Layout proposto
 
 Utilizando como base o wireframe fornecido, foi desenvolvido um protótipo utilizando o Figma que pode ser acessado livremente através do link abaixo:
