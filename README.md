@@ -51,7 +51,9 @@ npm run android
 # OR using Yarn
 yarn android
 ```
-
+<!-- Criar documentação para chave de debug, instalação do firebase e setup do projeto android
+Além de assinar chaves SHA1 para o projeto
+ -->
 ### iOS
 
 Caso esteja executando o projeto em um ambiente MAC OS, você pode optar por utilizar o Xcode para emular um dispositivo IOS.
