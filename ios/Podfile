@@ -6,11 +6,16 @@ require Pod::Executable.execute_command('node', ['-p',
   )', __dir__]).strip
 
 platform :ios, min_ios_version_supported
+use_modular_headers!
+
 pod 'GoogleSignIn'
-pod 'Firebase', :modular_headers => true
-pod 'FirebaseCoreInternal', :modular_headers => true
-pod 'GoogleUtilities', :modular_headers => true
-pod 'FirebaseCore', :modular_headers => true
+pod 'Firebase/Auth', :modular_headers => true
+pod 'Firebase/Firestore', :modular_headers => true
+pod 'Firebase'
+pod 'FirebaseCore'
+pod 'FirebaseCoreInternal'
+pod 'GoogleUtilities'
+$RNFirebaseAsStaticFramework = true
 prepare_react_native_project!
 
 linkage = ENV['USE_FRAMEWORKS']

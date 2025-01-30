@@ -3,11 +3,14 @@ import React
 import React_RCTAppDelegate
 import ReactAppDependencyProvider
 import FirebaseCore
+import FirebaseFirestore
+import FirebaseAuth
 @main
 class AppDelegate: RCTAppDelegate {
   override func application(_ application: UIApplication, 
   didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
     FirebaseCore.configure()
+    FirebaseApp.configure()
     self.moduleName = "MobileDictionary"
     self.dependencyProvider = RCTAppDependencyProvider()
 
