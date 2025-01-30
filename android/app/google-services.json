@@ -1,0 +1,62 @@
+{
+  "project_info": {
+    "project_number": "996683014454",
+    "project_id": "mobile-dictionary-bfe6e",
+    "storage_bucket": "mobile-dictionary-bfe6e.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:996683014454:android:f0839a0c643ddceac25397",
+        "android_client_info": {
+          "package_name": "com.mobiledictionary"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "996683014454-62r85aouddf6sjslv6n2c1nkrvsd0lf4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mobiledictionary",
+            "certificate_hash": "5001071c0cc9c191c271ecb66cf518bbac607cca"
+          }
+        },
+        {
+          "client_id": "996683014454-rartitpjng3jcrqh3sbv5j2nllrh71aj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mobiledictionary",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "996683014454-lk8hct425bdhau1ad39b798tmd04jgnr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBUoEn1ura7J4iI_d_U2-w-OZ6j0VfAPUA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "996683014454-lk8hct425bdhau1ad39b798tmd04jgnr.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "996683014454-s7uq35qtk2ir2i0ve47b4lsq5m2d2t67.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "org.reactjs.native.example.MobileDictionary"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
