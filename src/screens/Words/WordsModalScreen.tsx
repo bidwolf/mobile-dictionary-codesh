@@ -2,12 +2,13 @@ import { Player } from "@components/Player";
 import Icon from "@react-native-vector-icons/fontawesome6";
 import { StaticScreenProps, useNavigation } from "@react-navigation/native"
 import { Favorite } from "@store/favorites/interfaces/favorites";
-import { addFavorite } from "@store/favorites/thunks";
+import { getFavorite } from "@store/favorites/selectors";
+import { addFavorite, removeFavorite, viewFavorites } from "@store/favorites/thunks";
 import { useAppDispatch } from "@store/hooks/useAppDispatch";
 import { useAppSelector } from "@store/hooks/useAppSelector";
 import { useGetFoneticsQuery } from "@store/word/apiSlice";
 import { DefaultTheme } from "@theme/index";
-import { useState } from "react";
+import React, { useState } from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native"
 import { Text } from "react-native"
 type Props = StaticScreenProps<{
@@ -19,16 +20,24 @@ export const WordsModalScreen = ({ route }: Props) => {
   const { uid } = useAppSelector(state => state.user)
   const { data, isLoading } = useGetFoneticsQuery(route.params.word)
   const [currentPlayer, setCurrentPlayer] = useState(0)
+  const isfavorite = useAppSelector((state) => getFavorite(state, route.params.word))
   const AddToFavorites = (word: string, phonetic: string) => {
     const favorite: Favorite = {
       word: word,
       phonetic: phonetic
-
     }
     dispatch(addFavorite({
       favorite: favorite,
       userId: uid
     }))
+  }
+  const RemoveFromFavorites = () => {
+    if (isfavorite) {
+      dispatch(removeFavorite({
+        word: isfavorite.word,
+        userId: uid
+      }))
+    }
   }
   const goToNextPlayer = () => {
     if (!data || !data[0] || !data[0].meanings) return
@@ -46,6 +55,12 @@ export const WordsModalScreen = ({ route }: Props) => {
     }
     setCurrentPlayer(previousPlayer => previousPlayer - 1)
   }
+  React.useEffect(() => {
+    if (!uid) return
+    if (!isfavorite) {
+      dispatch(viewFavorites(uid))
+    }
+  }, [])
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.closeIcon} onPress={() => navigation.goBack()}>
@@ -77,16 +92,26 @@ export const WordsModalScreen = ({ route }: Props) => {
           ))}
         </View>}
       <TouchableOpacity
+        disabled={!data || !data[0]}
         onPress={() => {
           if (data && data[0]) {
-            AddToFavorites(data[0].word, data[0].phonetic || "")
+            isfavorite
+              ? RemoveFromFavorites()
+              : AddToFavorites(data[0].word, data[0].phonetic || "")
           }
         }}
-        style={styles.favoriteButton}
+        style={[
+          styles.favoriteButton,
+          {
+            backgroundColor: isfavorite ? "red" : DefaultTheme.colors.primary,
+            opacity: !data || !data[0] ? 0.5 : 1,
+          }
+        ]}
       >
+        <Icon name="heart" size={24} color="#FEFEFF" iconStyle="solid" />
         <Text style={{
           color: '#FEFEFF'
-        }}>Adicionar aos favoritos</Text>
+        }}>{isfavorite ? "Remover dos favoritos" : "Adicionar aos favoritos"}</Text>
       </TouchableOpacity>
       <View style={{
         flexDirection: 'row',
@@ -97,13 +122,24 @@ export const WordsModalScreen = ({ route }: Props) => {
       }}>
         <TouchableOpacity
           onPress={goToPreviousPlayer}
-          style={styles.previousButton}
+          disabled={!data || !data[0]}
+          style={[styles.previousButton, {
+            opacity: !data || !data[0] ? 0.5 : 1,
+            borderWidth: 1,
+            borderColor: !data || !data[0] ? "transparent" : '#8E8E8E'
+          }]}
         >
           <Text style={{
             color: '#8E8E8E'
           }}>Voltar</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.nextButton} onPress={goToNextPlayer}>
+        <TouchableOpacity
+          disabled={!data || !data[0]}
+          style={[styles.nextButton, {
+            opacity: !data || !data[0] ? 0.5 : 1,
+          }]}
+          onPress={goToNextPlayer}
+        >
           <Text style={{
             color: '#FEFEFF'
           }}>Próximo</Text>
@@ -130,9 +166,10 @@ const styles = StyleSheet.create({
   },
   favoriteButton: {
     padding: 8,
+    flexDirection: 'row',
+    gap: 8,
     borderRadius: 8,
     backgroundColor: DefaultTheme.colors.primary,
-    borderWidth: 1,
     width: '100%',
     margin: 32,
     alignItems: 'center',
