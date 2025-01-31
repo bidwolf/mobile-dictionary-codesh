@@ -31,6 +31,10 @@ const FavoritesScreen = () => {
   const handleRemoveFavorite = (word: string) => {
     dispatch(removeFavorite({ userId, word }))
   }
+
+  React.useEffect(() => {
+    dispatch(viewFavorites(userId))
+  }, [])
   const { dataSource, offset, getData } = usePaginatedData(favorites, ITEMS_PER_PAGE, INITIAL_DISPLAY_COUNT);
   const WINDOW_SIZE = favorites.length > MIN_WORDS_FOR_LARGE_WINDOW ? favorites.length / 4 : DEFAULT_WINDOW_SIZE;
   const LOW_OFFSET_THRESHOLD = 10;
@@ -39,9 +43,6 @@ const FavoritesScreen = () => {
   const onEndReachedThreshold = offset < LOW_OFFSET_THRESHOLD
     ? offset * LOW_OFFSET_MULTIPLIER
     : DEFAULT_THRESHOLD;
-  React.useEffect(() => {
-    dispatch(viewFavorites(userId))
-  }, [])
   return (
     <View style={styles.container}>
       {loading && (

@@ -1,7 +1,6 @@
 import React from 'react';
 import { IconHeader } from '@components/IconHeader';
 import Icon from '@react-native-vector-icons/fontawesome6';
-import { useTheme } from '@react-navigation/native';
 import { useAppSelector } from '@store/hooks/useAppSelector';
 import { View, Text, StyleSheet, FlatList, } from 'react-native';
 import { useAppDispatch } from '@store/hooks/useAppDispatch';
@@ -22,7 +21,9 @@ const DEFAULT_WINDOW_SIZE = 21;
 const HistoryScreen = () => {
   const { userId, error, history, loading } = useAppSelector(state => selectUserAndHistory(state))
   const dispatch = useAppDispatch();
-  const theme = useTheme();
+  React.useEffect(() => {
+    dispatch(viewHistory(userId))
+  }, [])
   const { dataSource, offset, getData } = usePaginatedData(history, ITEMS_PER_PAGE, INITIAL_DISPLAY_COUNT);
   const WINDOW_SIZE = history.length > MIN_WORDS_FOR_LARGE_WINDOW ? history.length / 4 : DEFAULT_WINDOW_SIZE;
   const LOW_OFFSET_THRESHOLD = 10;
@@ -31,9 +32,6 @@ const HistoryScreen = () => {
   const onEndReachedThreshold = offset < LOW_OFFSET_THRESHOLD
     ? offset * LOW_OFFSET_MULTIPLIER
     : DEFAULT_THRESHOLD;
-  React.useEffect(() => {
-    dispatch(viewHistory(userId))
-  }, [])
   return (
     <View style={styles.container}>
       {loading && (
