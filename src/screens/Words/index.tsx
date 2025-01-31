@@ -6,17 +6,26 @@ import Icon from "@react-native-vector-icons/fontawesome6"
 import { useTheme } from '@react-navigation/native';
 import { IconHeader } from '@components/IconHeader';
 import { LoadingOverlay } from '@components/LoadingOverlay';
+import { usePaginatedData } from '@hooks/usePaginatedData';
+
+const ITEMS_PER_PAGE = 100
+const INITIAL_DISPLAY_COUNT = 40
+const MIN_WORDS_FOR_LARGE_WINDOW = 50;
+const DEFAULT_WINDOW_SIZE = 21;
 
 const WordsScreen = () => {
   const [words, setWords] = React.useState<string[]>([]);
-  const [dataSource, setDataSource] = React.useState<string[]>([]);
   const [loading, setLoading] = React.useState(false)
-  const [offset, setOffset] = React.useState(1);
   const keyExtractor = (item: string) => item
-  const ITEMS_PER_PAGE = 100
-  const INITIAL_DISPLAY_COUNT = 40
-  const WINDOW_SIZE = words.length > 50 ? words.length / 4 : 21;
   const theme = useTheme()
+  const { dataSource, offset, getData } = usePaginatedData(words, ITEMS_PER_PAGE, INITIAL_DISPLAY_COUNT);
+  const WINDOW_SIZE = words.length > MIN_WORDS_FOR_LARGE_WINDOW ? words.length / 4 : DEFAULT_WINDOW_SIZE;
+  const LOW_OFFSET_THRESHOLD = 10;
+  const LOW_OFFSET_MULTIPLIER = 2;
+  const DEFAULT_THRESHOLD = 20;
+  const onEndReachedThreshold = offset < LOW_OFFSET_THRESHOLD
+    ? offset * LOW_OFFSET_MULTIPLIER
+    : DEFAULT_THRESHOLD;
   React.useEffect(() => {
     const fetchWords = async () => {
       try {
@@ -56,22 +65,6 @@ const WordsScreen = () => {
     };
     fetchWords();
   }, []);
-  React.useEffect(() => {
-
-    if (dataSource.length < words.length) {
-      if (offset == 1) {
-        setDataSource(words.slice(0, offset * INITIAL_DISPLAY_COUNT))
-      }
-    }
-
-  }, [words])
-  const getData = () => {
-
-    if (dataSource.length < words.length && words.length != 0) {
-      setOffset(offset + 1);
-      setDataSource(words.slice(0, offset * ITEMS_PER_PAGE))
-    }
-  };
   return (
     <View style={styles.container}>
       {loading && <LoadingOverlay />}
@@ -85,11 +78,11 @@ const WordsScreen = () => {
         data={dataSource}
         numColumns={3}
         initialNumToRender={INITIAL_DISPLAY_COUNT}
-        windowSize={WINDOW_SIZE} //If you have scroll stuttering but working fine when 'disableVirtualization = true' then use this windowSize, it fix the stuttering problem.
+        windowSize={WINDOW_SIZE}
         maxToRenderPerBatch={ITEMS_PER_PAGE}
         updateCellsBatchingPeriod={ITEMS_PER_PAGE / 2}
         keyExtractor={keyExtractor}
-        onEndReachedThreshold={offset < 10 ? (offset * (offset == 1 ? 2 : 2)) : 20} //While you scolling the offset number and your data number will increases.So endReached will be triggered earlier because our data will be too many
+        onEndReachedThreshold={onEndReachedThreshold}
         onEndReached={getData}
         removeClippedSubviews={true}
         renderItem={({ item }) => <WordItem title={item} />}
