@@ -4,6 +4,7 @@ import { StaticScreenProps, useNavigation } from "@react-navigation/native"
 import { Favorite } from "@store/favorites/interfaces/favorites";
 import { getFavorite } from "@store/favorites/selectors";
 import { addFavorite, removeFavorite, viewFavorites } from "@store/favorites/thunks";
+import { registerWordView } from "@store/history/thunks";
 import { useAppDispatch } from "@store/hooks/useAppDispatch";
 import { useAppSelector } from "@store/hooks/useAppSelector";
 import { useGetFoneticsQuery } from "@store/word/apiSlice";
@@ -60,6 +61,14 @@ export const WordsModalScreen = ({ route }: Props) => {
     if (!isfavorite) {
       dispatch(viewFavorites(uid))
     }
+    dispatch(registerWordView(
+      {
+        wordViewed: {
+          word: route.params.word,
+          viewedAt: new Date().toISOString()
+        }, userId: uid
+      }
+    ))
   }, [])
   return (
     <View style={styles.container}>
