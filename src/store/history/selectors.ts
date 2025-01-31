@@ -3,10 +3,10 @@ import { RootState } from "../types";
 
 export const selectUserAndHistory = createSelector(
   [(state: RootState) => state.user, (state: RootState) => state.history],
-  (user, favorites) => ({
+  (user, historyRecords) => ({
     userId: user.uid,
-    history: favorites.history,
-    loading: favorites.loading,
-    error: favorites.error
+    history: historyRecords.history,
+    loading: historyRecords.loading,
+    error: historyRecords.error
   })
 );

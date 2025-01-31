@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { collection, query, getDocs, doc, addDoc, setDoc, where, deleteDoc } from 'firebase/firestore';
+import { collection, query, getDocs, addDoc, where, deleteDoc } from 'firebase/firestore';
 import { Favorite } from './interfaces/favorites';
 import { FIREBASE_DB } from '../../../firebase.config';
 
@@ -17,7 +17,8 @@ export const addFavorite = createAsyncThunk(
       const newFavorite = await addDoc(favoritesRef, {
         word: favorite.word,
         phonetic: favorite.phonetic,
-        userId: userId
+        userId: userId,
+        addedAt: new Date().toISOString(),
       });
       const data = newFavorite.id;
       if (!data) {
@@ -60,7 +61,8 @@ export const viewFavorites = createAsyncThunk(
       const favoritesSnapshot = await getDocs(favoritesQuery);
       const data: Favorite[] = favoritesSnapshot.docs.map(doc => ({
         phonetic: doc.data().phonetic,
-        word: doc.data().word
+        word: doc.data().word,
+        addedAt: doc.data().addedAt,
       }));
       return data;
     } catch (error: any) {

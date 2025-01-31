@@ -6,5 +6,6 @@ export interface FavoritesState {
 export type Favorite = {
   word: string;
   phonetic: string;
+  addedAt: string;
   id?: string;
 }
