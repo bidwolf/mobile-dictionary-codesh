@@ -1,13 +1,16 @@
 import React from 'react';
-import { View, Text, StyleSheet, FlatList } from 'react-native';
+import { View, StyleSheet, FlatList } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { WordItem } from '@components/WordItem';
 import Icon from "@react-native-vector-icons/fontawesome6"
 import { useTheme } from '@react-navigation/native';
+import { IconHeader } from '@components/IconHeader';
+import { LoadingOverlay } from '@components/LoadingOverlay';
 
 const WordsScreen = () => {
   const [words, setWords] = React.useState<string[]>([]);
   const [dataSource, setDataSource] = React.useState<string[]>([]);
+  const [loading, setLoading] = React.useState(false)
   const [offset, setOffset] = React.useState(1);
   const keyExtractor = (item: string) => item
   const ITEMS_PER_PAGE = 100
@@ -17,6 +20,7 @@ const WordsScreen = () => {
   React.useEffect(() => {
     const fetchWords = async () => {
       try {
+        setLoading(true)
         const cached = await AsyncStorage.getItem("words_chunks");
         if (cached) {
           const parsedCache = JSON.parse(cached);
@@ -46,6 +50,9 @@ const WordsScreen = () => {
       } catch (error) {
         console.error("Erro ao exibir lista", error);
       }
+      finally {
+        setLoading(false)
+      }
     };
     fetchWords();
   }, []);
@@ -67,24 +74,13 @@ const WordsScreen = () => {
   };
   return (
     <View style={styles.container}>
-      <View style={{
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: theme.colors.primary,
-        opacity: 0.5,
-        paddingBlock: 20,
-        paddingInline: 24,
-        borderRadius: 99999
-      }}>
-        <Icon name='play' size={24} color={theme.colors.primary} iconStyle='solid' />
-      </View>
-      <Text style={styles.text}>Lista de palavras</Text>
-      <Text style={{
-        fontSize: 12,
-        fontWeight: theme.fonts.medium.fontWeight,
-        fontFamily: theme.fonts.medium.fontFamily,
-        color: theme.colors.text,
-      }}>Para aprender uma palavra você pode clicar em uma das palavras abaixo.</Text>
+      {loading && <LoadingOverlay />}
+      <IconHeader
+        FaIcon={<Icon name='play' size={24} color={theme.colors.primary} iconStyle='solid' />}
+        backgroundColor={theme.colors.primary}
+        title='Lista de palavras'
+        description='Para aprender uma palavra você pode clicar em uma das palavras abaixo.'
+      />
       <FlatList
         data={dataSource}
         numColumns={3}

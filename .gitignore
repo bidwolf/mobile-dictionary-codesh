@@ -235,3 +235,7 @@ node_modules/
 
 # dotenv environment variables file
 .env
+
+ios/Pods
+ios/Podfile.lock
+ios/build

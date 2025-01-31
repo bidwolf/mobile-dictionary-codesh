@@ -8,6 +8,7 @@ import { styles } from "./style";
 import { useAppSelector } from "@store/hooks/useAppSelector";
 import { useAppDispatch } from "@store/hooks/useAppDispatch";
 import { loginWithGoogle } from "@store/user/thunks";
+import { LoadingOverlay } from "@components/LoadingOverlay";
 const LoginScreen = () => {
   const theme = useTheme()
   const { loading } = useAppSelector(state => state.user)
@@ -18,6 +19,7 @@ const LoginScreen = () => {
 
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
+      {loading && <LoadingOverlay />}
       <View style={styles.header}>
         <View style={styles.logo} >
           <Logo />
