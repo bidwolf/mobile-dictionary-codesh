@@ -8,6 +8,10 @@ export const favoriteSlice = createSlice({
   initialState: initialFavorites,
   reducers: {
   },
+  selectors: {
+    getFavorites: (state) => state.favorites,
+    getFavorite: (state, word: string) => state.favorites.find(favorite => favorite.word === word)
+  },
   extraReducers: (builder) => {
     addFavoriteBuilder(builder);
     viewFavoritesBuilder(builder);
