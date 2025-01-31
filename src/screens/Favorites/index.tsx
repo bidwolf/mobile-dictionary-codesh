@@ -60,6 +60,8 @@ const FavoritesScreen = () => {
           onEndReached={getData}
           onEndReachedThreshold={onEndReachedThreshold}
           windowSize={WINDOW_SIZE}
+          style={{ borderRadius: 16 }}
+          showsVerticalScrollIndicator={false}
           initialNumToRender={INITIAL_DISPLAY_COUNT}
           maxToRenderPerBatch={ITEMS_PER_PAGE}
           removeClippedSubviews={true}

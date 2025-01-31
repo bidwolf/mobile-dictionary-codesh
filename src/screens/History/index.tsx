@@ -46,6 +46,8 @@ const HistoryScreen = () => {
       <View style={{ flex: 1, marginBlockStart: 100 }}>
         <FlatList
           data={dataSource}
+          showsVerticalScrollIndicator={false}
+          style={{ borderRadius: 16 }}
           initialNumToRender={INITIAL_DISPLAY_COUNT}
           windowSize={WINDOW_SIZE}
           maxToRenderPerBatch={ITEMS_PER_PAGE}

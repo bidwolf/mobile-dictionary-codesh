@@ -7,11 +7,10 @@ import {
 } from '@react-native-google-signin/google-signin';
 
 GoogleSignin.configure({
-  scopes: ['email', 'profile'], // what API you want to access on behalf of the user, default is email and profile
+  scopes: ['email', 'profile'],
   webClientId: '996683014454-lk8hct425bdhau1ad39b798tmd04jgnr.apps.googleusercontent.com',
-  offlineAccess: true, // if you want to access Google API on behalf of the user FROM YOUR SERVER
+  offlineAccess: true,
 });
-// Somewhere in your code
 const signIn = async () => {
   try {
     await GoogleSignin.hasPlayServices();
@@ -41,4 +40,11 @@ const signIn = async () => {
     }
   }
 };
-export { signIn }
+const signOut = async () => {
+  try {
+    await GoogleSignin.signOut();
+  } catch (error) {
+    console.error(error);
+  }
+}
+export { signIn, signOut }

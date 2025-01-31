@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { initialUserProfile } from "./initialState";
 import loginWithGoogleBuilder from "./builder/loginWithGoogleBuilder";
+import logoutFromGoogleBuilder from "./builder/logoutFromGoogleBuilder";
 export const userSlice = createSlice({
   name: "user",
   initialState: initialUserProfile,
@@ -14,5 +15,6 @@ export const userSlice = createSlice({
   },
   extraReducers: (builder) => {
     loginWithGoogleBuilder(builder)
+    logoutFromGoogleBuilder(builder)
   }
 })

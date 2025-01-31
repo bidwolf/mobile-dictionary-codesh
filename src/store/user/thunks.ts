@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { signIn } from '../../services/googleSignIn';
+import { signIn, signOut } from '../../services/googleAuthService';
 
 export const loginWithGoogle = createAsyncThunk(
   'user/loginWithGoogle',
@@ -15,6 +15,20 @@ export const loginWithGoogle = createAsyncThunk(
         return rejectWithValue(error.message);
       }
       return rejectWithValue("Error on login with Google")
+    }
+  },
+);
+export const logoutFromGoogle = createAsyncThunk(
+  'user/logoutFromGoogle',
+  async (_, { rejectWithValue }) => {
+    try {
+      await signOut()
+      return true;
+    } catch (error: any) {
+      if (error instanceof Error) {
+        return rejectWithValue(error.message);
+      }
+      return rejectWithValue("Error on logout")
     }
   },
 );
