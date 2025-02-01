@@ -3,6 +3,10 @@ import { DefaultTheme } from "@theme/index"
 import { useCallback } from "react"
 import { StyleSheet, TouchableOpacity } from "react-native"
 import { Text } from "react-native"
+import { Dimensions } from "react-native"
+
+const screenWidth = Dimensions.get('window').width
+const ITEM_WIDTH = screenWidth / 3 - 16
 export const WordItem = ({ title }: { title: string }) => {
   const navigation = useNavigation()
   const onPress = useCallback(() => {
@@ -16,9 +20,10 @@ export const WordItem = ({ title }: { title: string }) => {
     </TouchableOpacity>
   )
 }
+
 const styleItem = StyleSheet.create({
   square: {
-    width: 120,
+    width: ITEM_WIDTH,
     marginInline: 8,
     marginBlock: 8,
     height: 96,

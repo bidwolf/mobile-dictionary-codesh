@@ -1,13 +1,14 @@
 import { createStaticNavigation, StaticParamList } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { DarkTheme, DefaultTheme } from '../theme';
+import { DefaultTheme } from '../theme';
 import LoginScreen from "@screens/Login";
 import { SignInContext, useIsSignedIn, useIsSignedOut } from "../context/signedInContext";
 import { useAppSelector } from '@store/hooks/useAppSelector';
 
 import HomeStack from "./home.routes";
-import { useColorScheme } from "react-native";
 import { WordsModalScreen } from "@screens/Words/WordsModalScreen";
+import React from "react";
+import { initializeTtsListeners, playTTS } from "@events/ttsListeners";
 
 const RootStack = createNativeStackNavigator({
   screenOptions: {
@@ -50,12 +51,18 @@ const Router = createStaticNavigation(RootStack);
 
 export const Navigation = () => {
   const { token } = useAppSelector(state => state.user)
-  const scheme = useColorScheme()
 
   const isSignedIn = token !== null
+  React.useEffect(() => {
+    initializeTtsListeners();
+
+    return () => {
+      playTTS("Goodbye")
+    }
+  }, []);
   return (
     <SignInContext.Provider value={isSignedIn}>
-      <Router theme={scheme === "dark" ? DarkTheme : DefaultTheme} />
+      <Router theme={DefaultTheme} />
     </SignInContext.Provider>
 
   )

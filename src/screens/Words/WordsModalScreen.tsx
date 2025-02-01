@@ -1,3 +1,4 @@
+import * as React from "react";
 import { Player } from "@components/Player";
 import Icon from "@react-native-vector-icons/fontawesome6";
 import { StaticScreenProps, useNavigation } from "@react-navigation/native"
@@ -9,8 +10,7 @@ import { useAppDispatch } from "@store/hooks/useAppDispatch";
 import { useAppSelector } from "@store/hooks/useAppSelector";
 import { useGetFoneticsQuery } from "@store/word/apiSlice";
 import { DefaultTheme } from "@theme/index";
-import React, { useState } from "react";
-import { StyleSheet, TouchableOpacity, View } from "react-native"
+import { StyleSheet, TouchableOpacity, View, ScrollView } from "react-native"
 import { Text } from "react-native"
 type Props = StaticScreenProps<{
   word: string;
@@ -20,12 +20,13 @@ export const WordsModalScreen = ({ route }: Props) => {
   const dispatch = useAppDispatch()
   const { uid } = useAppSelector(state => state.user)
   const { data, isLoading } = useGetFoneticsQuery(route.params.word)
-  const [currentPlayer, setCurrentPlayer] = useState(0)
+  const [currentPlayer, setCurrentPlayer] = React.useState(0)
   const isfavorite = useAppSelector((state) => getFavorite(state, route.params.word))
   const AddToFavorites = (word: string, phonetic: string) => {
     const favorite: Favorite = {
       word: word,
-      phonetic: phonetic
+      phonetic: phonetic,
+      addedAt: new Date().toISOString()
     }
     dispatch(addFavorite({
       favorite: favorite,
@@ -71,96 +72,100 @@ export const WordsModalScreen = ({ route }: Props) => {
     ))
   }, [])
   return (
-    <View style={styles.container}>
-      <TouchableOpacity style={styles.closeIcon} onPress={() => navigation.goBack()}>
-        <Icon name="x" size={24} color="#8E8E8E" iconStyle="solid" />
-      </TouchableOpacity>
-      {isLoading && <Text>Loading...</Text>}
-      {!isLoading && data && <Player word={data[0].word} phonetic={data[0].phonetic} />}
-      {!isLoading && !data && <Text>No data</Text>}
-      {!isLoading && data &&
-        <View style={{
-          padding: 16,
-          margin: 16,
-          gap: 4
-        }}>
-          <Text style={styles.meaningSubtitle}>Meanings</Text>
-          {data && data[0] && data[0].meanings && data[0].meanings.map((meaning, index) => (
-            <View key={index}>
-              <Text style={styles.meaningDefinition}>{meaning.partOfSpeech} - {meaning.definitions[0].definition}</Text>
-
-              <Text style={styles.meaningSubtitle}>
-                Another Definitions
-              </Text>
-              {
-                meaning.definitions.slice(1,).map((definition, index) => (
-                  <Text key={index} style={[styles.meaningDefinition, { margin: 2 }]}> - {definition.definition}</Text>
-                ))
-              }
-            </View>
-          ))}
-        </View>}
-      <TouchableOpacity
-        disabled={!data || !data[0]}
-        onPress={() => {
-          if (data && data[0]) {
-            isfavorite
-              ? RemoveFromFavorites()
-              : AddToFavorites(data[0].word, data[0].phonetic || "")
-          }
-        }}
-        style={[
-          styles.favoriteButton,
-          {
-            backgroundColor: isfavorite ? "red" : DefaultTheme.colors.primary,
-            opacity: !data || !data[0] ? 0.5 : 1,
-          }
-        ]}
-      >
-        <Icon name="heart" size={24} color="#FEFEFF" iconStyle="solid" />
-        <Text style={{
-          color: '#FEFEFF'
-        }}>{isfavorite ? "Remover dos favoritos" : "Adicionar aos favoritos"}</Text>
-      </TouchableOpacity>
-      <View style={{
-        flexDirection: 'row',
-        justifyContent: 'space-around',
-        width: '100%',
-        padding: 16,
-        gap: 16
-      }}>
-        <TouchableOpacity
-          onPress={goToPreviousPlayer}
-          disabled={!data || !data[0]}
-          style={[styles.previousButton, {
-            opacity: !data || !data[0] ? 0.5 : 1,
-            borderWidth: 1,
-            borderColor: !data || !data[0] ? "transparent" : '#8E8E8E'
-          }]}
-        >
-          <Text style={{
-            color: '#8E8E8E'
-          }}>Voltar</Text>
+    <ScrollView contentContainerStyle={styles.scrollContainer}>
+      <View style={styles.container}>
+        <TouchableOpacity style={styles.closeIcon} onPress={() => navigation.goBack()}>
+          <Icon name="x" size={24} color="#8E8E8E" iconStyle="solid" />
         </TouchableOpacity>
+        {isLoading && <Text>Loading...</Text>}
+        {!isLoading && <Player word={data?.[0].word || route.params.word} phonetic={data?.[0].phonetic || route.params.word} />}
+        {!isLoading && !data && <Text>No data</Text>}
+        {!isLoading && data &&
+          <View style={{
+            padding: 16,
+            margin: 16,
+            gap: 4
+          }}>
+            <Text style={styles.meaningSubtitle}>Meanings</Text>
+            {data && data[0] && data[0].meanings && data[0].meanings.map((meaning, index) => (
+              <View key={index}>
+                <Text selectable style={styles.meaningDefinition}>{meaning.partOfSpeech} - {meaning.definitions[0].definition}</Text>
+
+                <Text style={styles.meaningSubtitle}>
+                  Another Definitions
+                </Text>
+                {
+                  meaning.definitions.slice(1,).map((definition, index) => (
+                    <Text selectable key={index} style={[styles.meaningDefinition, { margin: 2 }]}> - {definition.definition}</Text>
+                  ))
+                }
+              </View>
+            ))}
+          </View>}
         <TouchableOpacity
           disabled={!data || !data[0]}
-          style={[styles.nextButton, {
-            opacity: !data || !data[0] ? 0.5 : 1,
-          }]}
-          onPress={goToNextPlayer}
+          onPress={() => {
+            if (data && data[0]) {
+              isfavorite
+                ? RemoveFromFavorites()
+                : AddToFavorites(data[0].word, data[0].phonetic || "")
+            }
+          }}
+          style={[
+            styles.favoriteButton,
+            {
+              backgroundColor: isfavorite ? "red" : DefaultTheme.colors.primary,
+              opacity: !data || !data[0] ? 0.5 : 1,
+            }
+          ]}
         >
+          <Icon name="heart" size={24} color="#FEFEFF" iconStyle="solid" />
           <Text style={{
             color: '#FEFEFF'
-          }}>Próximo</Text>
+          }}>{isfavorite ? "Remover dos favoritos" : "Adicionar aos favoritos"}</Text>
         </TouchableOpacity>
+        <View style={{
+          flexDirection: 'row',
+          justifyContent: 'space-around',
+          width: '100%',
+          padding: 16,
+          gap: 16
+        }}>
+          <TouchableOpacity
+            onPress={goToPreviousPlayer}
+            disabled={!data || !data[0]}
+            style={[styles.previousButton, {
+              opacity: !data || !data[0] ? 0.5 : 1,
+              borderWidth: 1,
+              borderColor: !data || !data[0] ? "transparent" : '#8E8E8E'
+            }]}
+          >
+            <Text style={{
+              color: '#8E8E8E'
+            }}>Voltar</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            disabled={!data || !data[0]}
+            style={[styles.nextButton, {
+              opacity: !data || !data[0] ? 0.5 : 1,
+            }]}
+            onPress={goToNextPlayer}
+          >
+            <Text style={{
+              color: '#FEFEFF'
+            }}>Próximo</Text>
+          </TouchableOpacity>
+        </View>
       </View>
-    </View>
+    </ScrollView>
   )
 }
 
-
-
 const styles = StyleSheet.create({
+  scrollContainer: {
+    flexGrow: 1,
+    justifyContent: 'center',
+  },
   container: {
     flex: 1,
     justifyContent: 'center',

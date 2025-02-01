@@ -27,6 +27,9 @@
       ],
       "@hooks/*": [
         "./src/hooks/*"
+      ],
+      "@events/*": [
+        "./src/events/*"
       ]
     }
   }

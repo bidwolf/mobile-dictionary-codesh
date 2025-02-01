@@ -30,6 +30,7 @@ const FavoritesScreen = () => {
   }
   const handleRemoveFavorite = (word: string) => {
     dispatch(removeFavorite({ userId, word }))
+    dispatch(viewFavorites(userId))
   }
 
   React.useEffect(() => {
