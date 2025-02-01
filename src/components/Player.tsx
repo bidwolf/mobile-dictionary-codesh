@@ -1,16 +1,44 @@
+import * as React from "react"
 import Icon from "@react-native-vector-icons/fontawesome6"
 import { DefaultTheme } from "@theme/index"
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native"
+import { playTTS } from "@events/ttsListeners"
+import { Animated } from 'react-native';
 
 export const Player = ({ word, phonetic }: { word: string, phonetic?: string }) => {
+  const [progress, setProgress] = React.useState(0);
+  const progressAnim = React.useRef(new Animated.Value(0)).current;
+
+
+  React.useEffect(() => {
+    Animated.timing(progressAnim, {
+      toValue: progress,
+      duration: 100,
+      useNativeDriver: false,
+    }).start();
+  }, [progress]);
+  const onPlay = () => {
+    playTTS(word)
+    setProgress(1)
+    setTimeout(() => {
+      setProgress(0)
+    }, 1000)
+
+  }
   return (
     <View style={styles.playerContainer}>
       <View style={{
         alignContent: 'center',
         justifyContent: 'center',
       }}>
-        <Text style={styles.phoneticText}>{word}</Text>
-        {phonetic && <Text>{phonetic}</Text>}
+        <Text selectable style={styles.phoneticText}>{word}</Text>
+        {phonetic && <Text selectable style={{
+          ...styles.phoneticText,
+          color: "#ccc",
+          fontSize: DefaultTheme.fontsize.m,
+          textTransform: 'none',
+          textAlign: 'center'
+        }}>{phonetic}</Text>}
       </View>
       <View style={{
         flexDirection: 'row',
@@ -19,10 +47,16 @@ export const Player = ({ word, phonetic }: { word: string, phonetic?: string }) 
         marginBlock: 32,
         marginInline: 16
       }}>
-        <TouchableOpacity onPress={() => { }} >
-          <Icon name="circle-play" size={24} color="#8E8E8E" iconStyle="solid" />
+        <TouchableOpacity onPress={onPlay} >
+          <Icon name="circle-play" size={24} color="#fff" iconStyle="solid" />
         </TouchableOpacity>
-        <View style={styles.progressBar}>
+        <View style={styles.progressBarBackground}>
+          <Animated.View style={[styles.progressBar, {
+            width: progressAnim.interpolate({
+              inputRange: [0, 1],
+              outputRange: ['0%', '100%']
+            })
+          }]} />
         </View>
       </View>
     </View>
@@ -30,6 +64,12 @@ export const Player = ({ word, phonetic }: { word: string, phonetic?: string }) 
 }
 
 const styles = StyleSheet.create({
+  progressBarBackground: {
+    height: 4,
+    width: '100%',
+    backgroundColor: "#ccc",
+    borderRadius: 16
+  },
   progressBar: {
     height: 4,
     flexDirection: "row",
@@ -49,7 +89,8 @@ const styles = StyleSheet.create({
   phoneticText: {
     fontFamily: DefaultTheme.fonts.bold.fontFamily,
     fontSize: DefaultTheme.fontsize.l,
-    color: DefaultTheme.colors.text,
+    fontWeight: DefaultTheme.fonts.bold.fontWeight,
+    color: "#FEFEFF",
     textTransform: 'capitalize'
   }
 })
