@@ -10,6 +10,8 @@ export function usePaginatedData<T>(data: T[], itemsPerPage: number, initialDisp
         setDataSource(data.slice(0, offset * initialDisplayCount));
       }
     }
+    if (data.length === 0)
+      setDataSource([])
   }, [data]);
 
   const getData = React.useCallback(() => {
