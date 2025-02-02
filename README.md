@@ -1,12 +1,13 @@
+![Designer-4](https://github.com/user-attachments/assets/0fd234c5-c6ad-4bed-ac5c-c947d079bdae)
+
 # Mobile Dictionary App
 
 Este é um aplicativo voltado para pessoas que desejam aprender novas palavras em inglês.
 Com ele você pode pesquisar por palavras, ver definições e salvar palavras favoritas.
 Viu uma palavra mas esqueceu de salvar? O histórico de palavras pesquisadas está disponível para você!
 >[!NOTE]
-> Você pode baixar o apk do app [aqui](https://github.com/bidwolf/mobile-dictionary-codesh/releases/tag/v1.0.0)
-
 >  This is a challenge by [Coodesh](https://coodesh.com/)
+
 
 # Sumário
 - [Mobile Dictionary App](#mobile-dictionary-app)
@@ -46,6 +47,7 @@ Utilizando como base o wireframe fornecido, foi desenvolvido um protótipo utili
 ## Sobre as tecnologias
 
 O projeto foi desenvolvido utilizando o React Native, pois além de ser versátil e possuir uma comunidade muito ativa, permite a criação de aplicativos nativos para Android e IOS usando uma única base de código.
+
 O uso de Typescript é uma escolha pessoal, pois tenho mesmo usando javascript diariamente, a tipagem do Typescript ajuda muito a evitar erros comuns durante o desenvolvimento como chamadas de métodos inexistentes ou passagem de parâmetros incorretos.
 
 O Firebase foi utilizado para armazenar as palavras favoritas/histórico relacionadas ao usuário, além de fornecer autenticação social para o app que ajuda muito tanto no desenvolvimento quanto na experiência do usuário.
@@ -55,6 +57,10 @@ A respeito do uso do Redux, flutua entre pessoal e requisito do projeto. Geralme
 O Async Storage foi utilizado para armazenar informações locais do usuário, como o token de autenticação do Firebase, além de armazenar as palavras da lista de palavras do github em chunks de 1000 palavras pra evitar sobrecarga de memória.
 
 O date-fns foi utilizado para formatar datas de acordo com o padrão de data do Brasil, gosto de usar essa biblioteca por ser mais leve e ter uma API mais simples que o Moment.js.
+> [!TIP]
+>
+>  Aqui tem um pequeno [vídeo explicativo](https://drive.google.com/file/d/1WkY4yBcNUlHmqGoUXIsy5R7zFO2JeZbe/view?usp=share_link) sobre o projeto
+>
 
 # Inicializando o projeto
 
@@ -138,15 +144,20 @@ cd android && ./gradlew assembleRelease
 
 >[!TIP]
 > O apk gerado estará disponível em `android/app/build/outputs/apk/release/app-release.apk`
+>
+> Você pode também pode baixar o apk do app [aqui](https://github.com/bidwolf/mobile-dictionary-codesh/releases/tag/v1.0.0)
+
+
 
 # Testes e2e
 
 Para executar os testes e2e, é necessário que o app esteja rodando em um emulador ou dispositivo físico.
 Os testes são executados utilizando o [Maestro](https://maestro.mobile.dev/getting-started/installing-maestro), que é uma ferramenta de automação de testes e2e para aplicações mobile.
 
-Essa ferramente foi escolhida por ser mais simples de configurar e fácil de usar, além de ser open-source.
+Essa ferramenta foi escolhida por ser mais simples de configurar e fácil de usar, além de ser open-source.
 Usando o Maestro, é possível escrever testes usando linguagem yml, sendo mais acessível para pessoas que não possuem conhecimento em programação.
-O tutorial de instalação do Maestro pode ser encontrado [aqui](https://maestro.mobile.dev/getting-started/installing-maestro).
+>[!TIP]
+>O tutorial de instalação do Maestro pode ser encontrado [aqui](https://maestro.mobile.dev/getting-started/installing-maestro).
 ```sh
 # Usando npm
 npm run e2e
