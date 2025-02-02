@@ -2,12 +2,16 @@
   "name": "mobile-dictionary",
   "version": "0.0.1",
   "private": true,
+  "author": {
+    "name": "Henrique de Paula Rodrigues",
+    "url": "https://github.com/bidwolf"
+  },
   "scripts": {
     "android": "react-native run-android",
     "ios": "react-native run-ios",
     "lint": "eslint .",
     "start": "react-native start",
-    "test": "jest"
+    "e2e": "maestro test maestro/mainFunctionality.yml"
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "^2.1.0",
