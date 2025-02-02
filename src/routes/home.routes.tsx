@@ -55,9 +55,6 @@ const HomeStack = createBottomTabNavigator({
         tabBarShowLabel: false,
         tabBarActiveBackgroundColor: "#F0F4FE",
       },
-      initialParams: {
-        filter: ''
-      }
     },
     FavoritesScreen: {
       screen: FavoritesScreen,

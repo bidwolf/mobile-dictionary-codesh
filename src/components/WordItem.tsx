@@ -15,7 +15,7 @@ export const WordItem = ({ title }: { title: string }) => {
     })
   }, [useNavigation])
   return (
-    <TouchableOpacity style={styleItem.square} onPress={onPress}>
+    <TouchableOpacity testID={title} style={styleItem.square} onPress={onPress}>
       <Text style={styleItem.text}>{title}</Text>
     </TouchableOpacity>
   )

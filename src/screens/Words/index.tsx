@@ -3,39 +3,25 @@ import { View, StyleSheet, FlatList, TextInput, TouchableOpacity } from 'react-n
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { WordItem } from '@components/WordItem';
 import Icon from "@react-native-vector-icons/fontawesome6"
-import { CommonActions, StaticScreenProps, useTheme } from '@react-navigation/native';
+import { useTheme } from '@react-navigation/native';
 import { IconHeader } from '@components/IconHeader';
 import { LoadingOverlay } from '@components/LoadingOverlay';
 import { usePaginatedData } from '@hooks/usePaginatedData';
-import { useNavigation } from '@react-navigation/native';
 import { Text } from '@react-navigation/elements';
 
 const ITEMS_PER_PAGE = 100
 const INITIAL_DISPLAY_COUNT = 40
 const MIN_WORDS_FOR_LARGE_WINDOW = 50;
 const DEFAULT_WINDOW_SIZE = 21;
-type Props = StaticScreenProps<{
-  filter: string;
-}>;
-const WordsScreen: React.FC<Props> = ({ route }) => {
+
+const WordsScreen = () => {
   const [words, setWords] = React.useState<string[]>([]);
   const [loading, setLoading] = React.useState(false)
   const theme = useTheme()
-  const navigation = useNavigation();
-  const [textFilter, setTextFilter] = React.useState(route.params.filter || '');
-  const filterByText = (text: string) => {
-    setTextFilter(text);
-  };
+  const [textFilter, setTextFilter] = React.useState('');
 
-  const applyFilter = () => {
-    navigation.dispatch({
-      ...CommonActions.setParams(
-        {
-          filter: textFilter,
-        }
-      ),
-      source: undefined
-    })
+  const applyFilter = (text: string) => {
+    setTextFilter(text);
   };
 
   React.useEffect(() => {
@@ -57,9 +43,6 @@ const WordsScreen: React.FC<Props> = ({ route }) => {
               cachedWords = cachedWords.concat(JSON.parse(chunk));
             }
           });
-          if (route.params.filter) {
-            cachedWords = cachedWords.filter((word) => word.includes(route.params.filter));
-          }
           setWords(cachedWords);
           return;
         }
@@ -69,7 +52,7 @@ const WordsScreen: React.FC<Props> = ({ route }) => {
         const wordsArray = Object.keys(data);
 
 
-        const chunkSize = 2000;
+        const chunkSize = 1000;
         const chunks = Math.ceil(wordsArray.length / chunkSize);
         const cachePromises = [];
 
@@ -80,11 +63,6 @@ const WordsScreen: React.FC<Props> = ({ route }) => {
 
         await Promise.all(cachePromises);
         await AsyncStorage.setItem("words_chunks", JSON.stringify({ chunks }));
-
-        if (route.params.filter) {
-          setWords(wordsArray.filter((word) => word.includes(route.params.filter)));
-          return;
-        }
         setWords(wordsArray);
       } catch (error) {
         console.error("Erro ao exibir lista", error);
@@ -93,7 +71,16 @@ const WordsScreen: React.FC<Props> = ({ route }) => {
       }
     };
     fetchWords();
-  }, [route.params.filter]);
+  }, []);
+  const filteredWords = React.useMemo(() => {
+    return words
+      .filter(word => word.includes(textFilter))
+      .sort((a, b) => {
+        if (a.startsWith(textFilter) && !b.startsWith(textFilter)) return -1;
+        if (!a.startsWith(textFilter) && b.startsWith(textFilter)) return 1;
+        return 0;
+      });
+  }, [words, textFilter]);
   return (
     <View style={styles.container}>
       {loading && <LoadingOverlay />}
@@ -103,30 +90,11 @@ const WordsScreen: React.FC<Props> = ({ route }) => {
         title='Lista de palavras'
         description='Para aprender uma palavra você pode clicar em uma das palavras abaixo.'
       />
-      <View style={{
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: "center",
 
-        gap: 8,
-        margin: 16,
-      }}>
-        <SearchBar filterByText={filterByText} />
-        <TouchableOpacity onPress={applyFilter} style={{
-          backgroundColor: theme.colors.primary,
-          width: 100,
-          padding: 8,
-          borderRadius: 8,
-          justifyContent: 'center',
-          alignItems: 'center',
-          flexDirection: 'row',
-          gap: 8,
-        }}>
-          <Text style={{ color: 'white' }}>Filtrar</Text>
-          <Icon name='magnifying-glass' size={24} color={"white"} iconStyle='solid' />
-        </TouchableOpacity>
-      </View>
-      <List words={words} />
+      <SearchBar applyFilter={applyFilter} />
+      <List words={filteredWords} key={
+        textFilter
+      } />
     </View>
   );
 };
@@ -156,22 +124,53 @@ const List = ({ words }: { words: string[] }) => {
     />
   )
 }
-const SearchBar = ({ filterByText }: { filterByText: (text: string) => void }) => {
+type SearchBarProps = {
+  applyFilter: (text: string) => void;
+};
+const SearchBar = ({ applyFilter }: SearchBarProps) => {
   const theme = useTheme()
+  const [textFilter, setTextFilter] = React.useState('');
+  const filterByText = React.useCallback((text: string) => {
+    setTextFilter(text);
+  }, []);
   return (
-    <TextInput
-      placeholder="Buscar palavra"
-      style={{
-        flexGrow: 1,
-        height: 40,
-        borderColor: theme.colors.border,
-        borderWidth: 1,
-        borderRadius: 8,
+    <View style={{
+      flexDirection: 'row',
+      justifyContent: 'center',
+      alignItems: "center",
+
+      gap: 8,
+      margin: 16,
+    }}>
+
+      <TextInput
+        testID='searchInput'
+        placeholder="Buscar palavra"
+        style={{
+          flexGrow: 1,
+          height: 40,
+          borderColor: theme.colors.border,
+          borderWidth: 1,
+          borderRadius: 8,
+          padding: 8,
+          color: theme.colors.text,
+        }}
+        onChangeText={filterByText}
+      />
+      <TouchableOpacity testID='searchButton' onPress={() => applyFilter(textFilter)} style={{
+        backgroundColor: theme.colors.primary,
+        width: 100,
         padding: 8,
-        color: theme.colors.text,
-      }}
-      onChangeText={filterByText}
-    />
+        borderRadius: 8,
+        justifyContent: 'center',
+        alignItems: 'center',
+        flexDirection: 'row',
+        gap: 8,
+      }}>
+        <Text style={{ color: 'white' }}>Filtrar</Text>
+        <Icon name='magnifying-glass' size={24} color={"white"} iconStyle='solid' />
+      </TouchableOpacity>
+    </View>
   )
 }
 const styles = StyleSheet.create({

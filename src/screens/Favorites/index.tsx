@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { IconHeader } from '@components/IconHeader';
 import Icon from '@react-native-vector-icons/fontawesome6';
 import { useNavigation, useTheme } from '@react-navigation/native';
@@ -14,6 +14,7 @@ import { usePaginatedData } from '@hooks/usePaginatedData';
 import { TableRow } from '@components/Table/TableRow';
 import { DefaultTheme } from '@theme/index';
 import { TableHeader } from '@components/Table/TableHeader';
+import { Favorite } from '@store/favorites/interfaces/favorites';
 const ITEMS_PER_PAGE = 100
 const INITIAL_DISPLAY_COUNT = 40
 const MIN_WORDS_FOR_LARGE_WINDOW = 50;
@@ -22,7 +23,6 @@ const FavoritesScreen = () => {
   const { favorites, userId, error, loading } = useAppSelector(state => selectUserAndFavorites(state));
   const dispatch = useAppDispatch();
   const navigation = useNavigation()
-  const theme = useTheme();
   const handleViewDetails = (word: string) => {
     navigation.navigate('WordsModal', {
       word: word
@@ -36,14 +36,8 @@ const FavoritesScreen = () => {
   React.useEffect(() => {
     dispatch(viewFavorites(userId))
   }, [])
-  const { dataSource, offset, getData } = usePaginatedData(favorites, ITEMS_PER_PAGE, INITIAL_DISPLAY_COUNT);
-  const WINDOW_SIZE = favorites.length > MIN_WORDS_FOR_LARGE_WINDOW ? favorites.length / 4 : DEFAULT_WINDOW_SIZE;
-  const LOW_OFFSET_THRESHOLD = 10;
-  const LOW_OFFSET_MULTIPLIER = 2;
-  const DEFAULT_THRESHOLD = 20;
-  const onEndReachedThreshold = offset < LOW_OFFSET_THRESHOLD
-    ? offset * LOW_OFFSET_MULTIPLIER
-    : DEFAULT_THRESHOLD;
+
+
   return (
     <View style={styles.container}>
       {loading && (
@@ -54,41 +48,65 @@ const FavoritesScreen = () => {
         backgroundColor={'#FFE1E1'}
         title='Favoritos'
       />
-      <View style={{ flex: 1, marginBlockStart: 100 }}>
-        <FlatList
-          data={dataSource}
-          keyExtractor={(item, index) => item.word + index}
-          onEndReached={getData}
-          onEndReachedThreshold={onEndReachedThreshold}
-          windowSize={WINDOW_SIZE}
-          style={{ borderRadius: 16 }}
-          showsVerticalScrollIndicator={false}
-          initialNumToRender={INITIAL_DISPLAY_COUNT}
-          maxToRenderPerBatch={ITEMS_PER_PAGE}
-          removeClippedSubviews={true}
-          ListHeaderComponent={() => <FavoriteHeader shouldDisplay={favorites.length > 0} />}
-          StickyHeaderComponent={() => <FavoriteHeader shouldDisplay={favorites.length > 0} />}
-          ListEmptyComponent={ListEmptyComponent}
-          renderItem={({ item }) => (
-            <TableRow>
-              <Text style={styles.cell}>{item.word}</Text>
-              <View style={{ flexDirection: 'row', gap: 24 }}>
-                <Text style={styles.cell}>{item.phonetic}</Text>
-                <FavoriteActionsMenu
-                  trigger={
-                    <Icon name='ellipsis' size={16} color={theme.colors.text} style={{ opacity: 0.5, }} iconStyle='solid' />
-                  }
-                  handleViewWordMeaning={() => handleViewDetails(item.word)}
-                  handleRemoveFavorite={() => handleRemoveFavorite(item.word)}
-                />
-              </View>
-            </TableRow>
-          )}
-        />
-      </View>
+      <FavoriteList
+        key={favorites.length}
+        favorites={favorites}
+        handleRemoveFavorite={handleRemoveFavorite}
+        handleViewDetails={handleViewDetails}
+      />
     </View>
   );
 };
+type FavoriteListProps = {
+  favorites: Favorite[];
+  handleViewDetails: (word: string) => void;
+  handleRemoveFavorite: (word: string) => void;
+};
+const FavoriteList = ({ favorites, handleRemoveFavorite, handleViewDetails }: FavoriteListProps) => {
+  const theme = useTheme();
+  const { dataSource, offset, getData } = usePaginatedData(favorites, ITEMS_PER_PAGE, INITIAL_DISPLAY_COUNT);
+  const WINDOW_SIZE = favorites.length > MIN_WORDS_FOR_LARGE_WINDOW ? favorites.length / 4 : DEFAULT_WINDOW_SIZE;
+  const LOW_OFFSET_THRESHOLD = 10;
+  const LOW_OFFSET_MULTIPLIER = 2;
+  const DEFAULT_THRESHOLD = 20;
+  const onEndReachedThreshold = offset < LOW_OFFSET_THRESHOLD
+    ? offset * LOW_OFFSET_MULTIPLIER
+    : DEFAULT_THRESHOLD;
+  return (
+    <View style={{ flex: 1, marginBlockStart: 100 }}>
+      <FlatList
+        data={dataSource}
+        keyExtractor={(item, index) => item.word + index}
+        onEndReached={getData}
+        onEndReachedThreshold={onEndReachedThreshold}
+        windowSize={WINDOW_SIZE}
+        style={{ borderRadius: 16 }}
+        showsVerticalScrollIndicator={false}
+        initialNumToRender={INITIAL_DISPLAY_COUNT}
+        maxToRenderPerBatch={ITEMS_PER_PAGE}
+        removeClippedSubviews={true}
+        ListHeaderComponent={() => <FavoriteHeader shouldDisplay={favorites.length > 0} />}
+        StickyHeaderComponent={() => <FavoriteHeader shouldDisplay={favorites.length > 0} />}
+        ListEmptyComponent={ListEmptyComponent}
+        renderItem={({ item }) => (
+          <TableRow>
+            <Text testID="table-word-row" style={styles.cell}>{item.word}</Text>
+            <View style={{ flexDirection: 'row', gap: 24 }}>
+              <Text style={styles.cell}>{item.phonetic}</Text>
+              <FavoriteActionsMenu
+                trigger={
+                  <Icon name='ellipsis' testID='table-word-options' size={16} color={theme.colors.text} style={{ opacity: 0.5, }} iconStyle='solid' />
+                }
+                handleViewWordMeaning={() => handleViewDetails(item.word)}
+                handleRemoveFavorite={() => handleRemoveFavorite(item.word)}
+              />
+            </View>
+          </TableRow>
+        )}
+      />
+    </View>
+  )
+}
 const FavoriteHeader = ({ shouldDisplay: shouldDisplay = true }: { shouldDisplay?: boolean }) => (
   shouldDisplay ? (
     <TableHeader>

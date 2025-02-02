@@ -79,7 +79,6 @@ const styles = StyleSheet.create({
   },
   playerContainer: {
     width: '100%',
-    margin: 16,
     padding: 16,
     gap: 16,
     alignItems: 'center',
