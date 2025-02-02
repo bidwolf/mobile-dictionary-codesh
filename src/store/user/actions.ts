@@ -2,5 +2,6 @@ import { userSlice } from "./slice";
 
 export const {
   clearUserProfile,
-  setUserProfile
+  setUserProfile,
+  setLoading
 } = userSlice.actions;

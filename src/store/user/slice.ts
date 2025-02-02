@@ -6,11 +6,16 @@ export const userSlice = createSlice({
   name: "user",
   initialState: initialUserProfile,
   reducers: {
-    setUserProfile: (state, action) => {
+    setUserProfile: (state, action:
+      { type: string, payload: typeof initialUserProfile }
+    ) => {
       state = action.payload;
     },
     clearUserProfile: (state) => {
       state = initialUserProfile;
+    },
+    setLoading: (state, action: { type: string, payload: boolean }) => {
+      state.loading = action.payload;
     },
   },
   extraReducers: (builder) => {

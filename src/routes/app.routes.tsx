@@ -9,7 +9,9 @@ import HomeStack from "./home.routes";
 import { WordsModalScreen } from "@screens/Words/WordsModalScreen";
 import React from "react";
 import { initializeTtsListeners, playTTS } from "@events/ttsListeners";
-
+import { useAppDispatch } from "@store/hooks/useAppDispatch";
+import { loginWithGoogle } from "@store/user/thunks";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 const RootStack = createNativeStackNavigator({
   screenOptions: {
     headerShown: false,
@@ -51,15 +53,22 @@ const Router = createStaticNavigation(RootStack);
 
 export const Navigation = () => {
   const { token } = useAppSelector(state => state.user)
-
-  const isSignedIn = token !== null
+  const dispatch = useAppDispatch()
   React.useEffect(() => {
+    async function checkLoggedIn() {
+      const alreadyLoggedIn = await AsyncStorage.getItem('alreadyLogged')
+      if (alreadyLoggedIn === 'true') {
+        dispatch(loginWithGoogle())
+      }
+    }
+    checkLoggedIn();
     initializeTtsListeners();
 
     return () => {
-      playTTS("Goodbye")
+      playTTS("Goodbye");
     }
   }, []);
+  const isSignedIn = token !== null
   return (
     <SignInContext.Provider value={isSignedIn}>
       <Router theme={DefaultTheme} />

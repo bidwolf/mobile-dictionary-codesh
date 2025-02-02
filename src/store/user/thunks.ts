@@ -1,5 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { signIn, signOut } from '../../services/googleAuthService';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const loginWithGoogle = createAsyncThunk(
   'user/loginWithGoogle',
@@ -9,6 +10,7 @@ export const loginWithGoogle = createAsyncThunk(
       if (!data) {
         return rejectWithValue("Error on login with Google")
       }
+      await AsyncStorage.setItem("alreadyLogged", "true")
       return data;
     } catch (error: any) {
       if (error instanceof Error) {
@@ -23,6 +25,7 @@ export const logoutFromGoogle = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       await signOut()
+      await AsyncStorage.removeItem("alreadyLogged")
       return true;
     } catch (error: any) {
       if (error instanceof Error) {
