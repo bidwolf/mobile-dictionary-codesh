@@ -28,13 +28,13 @@ const HomeStack = createBottomTabNavigator({
       const label = labels[route.name as keyof typeof labels];
       const iconName: 'house' | 'book' | 'heart' | 'clock' = icons[route.name as keyof typeof icons];
       return !focused
-        ? (<Icon name={iconName} iconStyle='solid' color={color} size={size} />)
+        ? (<Icon name={iconName} iconStyle='solid' color={color} size={size} testID={route.name} />)
         : <Text style={{
           color: color,
           fontSize: 16,
           fontFamily: 'Roboto',
 
-        }}>{label}</Text>
+        }} >{label}</Text>
     },
   }),
   screens: {
@@ -54,7 +54,7 @@ const HomeStack = createBottomTabNavigator({
         headerShown: false,
         tabBarShowLabel: false,
         tabBarActiveBackgroundColor: "#F0F4FE",
-      }
+      },
     },
     FavoritesScreen: {
       screen: FavoritesScreen,

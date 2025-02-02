@@ -72,37 +72,49 @@ export const WordsModalScreen = ({ route }: Props) => {
     ))
   }, [])
   return (
-    <ScrollView contentContainerStyle={styles.scrollContainer}>
-      <View style={styles.container}>
-        <TouchableOpacity style={styles.closeIcon} onPress={() => navigation.goBack()}>
-          <Icon name="x" size={24} color="#8E8E8E" iconStyle="solid" />
-        </TouchableOpacity>
-        {isLoading && <Text>Loading...</Text>}
-        {!isLoading && <Player word={data?.[0].word || route.params.word} phonetic={data?.[0].phonetic || route.params.word} />}
-        {!isLoading && !data && <Text>No data</Text>}
-        {!isLoading && data &&
-          <View style={{
-            padding: 16,
-            margin: 16,
-            gap: 4
-          }}>
-            <Text style={styles.meaningSubtitle}>Meanings</Text>
-            {data && data[0] && data[0].meanings && data[0].meanings.map((meaning, index) => (
-              <View key={index}>
-                <Text selectable style={styles.meaningDefinition}>{meaning.partOfSpeech} - {meaning.definitions[0].definition}</Text>
+    <View style={{
+      padding: 16,
+      gap: 16
+    }}>
+      <TouchableOpacity style={styles.closeIcon} onPress={() => navigation.goBack()}>
+        <Icon name="x" size={24} color="#8E8E8E" iconStyle="solid" />
+      </TouchableOpacity>
+      {isLoading && <Text>Loading...</Text>}
+      {!isLoading && <Player word={data?.[0].word || route.params.word} phonetic={data?.[0].phonetic || route.params.word} />}
+      {!isLoading && !data && <Text>No data</Text>}
+      {!isLoading && data &&
+        <ScrollView style={{
+          minHeight: 150,
+          flexGrow: 1,
+          maxHeight: 300,
+        }} contentContainerStyle={styles.scrollContainer}>
+          <Text style={styles.meaningSubtitle}>Meanings</Text>
+          <Text selectable style={styles.meaningDefinition}>{data[0].meanings[0].partOfSpeech} - {data[0].meanings[0].definitions[0].definition}</Text>
+          {data && data[0] && data[0].meanings && data[0].meanings.length > 1 && (
 
-                <Text style={styles.meaningSubtitle}>
-                  Another Definitions
-                </Text>
-                {
-                  meaning.definitions.slice(1,).map((definition, index) => (
-                    <Text selectable key={index} style={[styles.meaningDefinition, { margin: 2 }]}> - {definition.definition}</Text>
-                  ))
-                }
-              </View>
-            ))}
-          </View>}
+            <Text style={styles.meaningSubtitle}>
+              Another Definitions
+            </Text>
+          )}
+          {data && data[0] && data[0].meanings && data[0].meanings.map((meaning, index) => (
+            <View key={index}>
+              {
+                meaning.definitions.slice(1,).map((definition, index) => (
+                  <Text selectable key={index} style={[styles.meaningDefinition, { margin: 2 }]}> - {definition.definition}</Text>
+                ))
+              }
+            </View>
+          ))}
+        </ScrollView>
+
+      }
+      <View style={
+        {
+          gap: 16,
+        }
+      }>
         <TouchableOpacity
+          testID="favoriteButton"
           disabled={!data || !data[0]}
           onPress={() => {
             if (data && data[0]) {
@@ -128,7 +140,6 @@ export const WordsModalScreen = ({ route }: Props) => {
           flexDirection: 'row',
           justifyContent: 'space-around',
           width: '100%',
-          padding: 16,
           gap: 16
         }}>
           <TouchableOpacity
@@ -157,7 +168,7 @@ export const WordsModalScreen = ({ route }: Props) => {
           </TouchableOpacity>
         </View>
       </View>
-    </ScrollView>
+    </View>
   )
 }
 
@@ -167,16 +178,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginInline: 20,
-    position: 'relative'
+    padding: 20,
   },
   closeIcon: {
-    position: 'absolute',
-    top: 20,
-    right: 20
+    alignSelf: 'flex-end',
+    padding: 16,
   },
   favoriteButton: {
     padding: 8,
@@ -185,7 +191,6 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     backgroundColor: DefaultTheme.colors.primary,
     width: '100%',
-    margin: 32,
     alignItems: 'center',
     justifyContent: 'center'
   },

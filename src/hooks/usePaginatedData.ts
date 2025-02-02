@@ -1,6 +1,8 @@
+import { Favorite } from '@store/favorites/interfaces/favorites';
+import { WordViewRecord } from '@store/history/interfaces/history';
 import * as React from 'react';
-
-export function usePaginatedData<T>(data: T[], itemsPerPage: number, initialDisplayCount: number) {
+export type IWordPaginationData = string | Favorite | WordViewRecord
+export function usePaginatedData<T extends IWordPaginationData>(data: T[], itemsPerPage: number, initialDisplayCount: number) {
   const [dataSource, setDataSource] = React.useState<T[]>([]);
   const [offset, setOffset] = React.useState(1);
 
@@ -12,7 +14,7 @@ export function usePaginatedData<T>(data: T[], itemsPerPage: number, initialDisp
     }
     if (data.length === 0)
       setDataSource([])
-  }, [data]);
+  }, [data, offset]);
 
   const getData = React.useCallback(() => {
     if (data.length > 0 && dataSource.length < data.length) {

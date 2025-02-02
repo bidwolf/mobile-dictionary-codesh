@@ -35,6 +35,7 @@ export const InteractiveCard = ({ title, onPress, word, action, navigateAction, 
           </Text>
           <TouchableOpacity
             onPress={onPress}
+            testID={`${word}-button`}
             style={{
               padding: 8,
               borderRadius: 8,
