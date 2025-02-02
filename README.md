@@ -3,8 +3,27 @@
 Este é um aplicativo voltado para pessoas que desejam aprender novas palavras em inglês.
 Com ele você pode pesquisar por palavras, ver definições e salvar palavras favoritas.
 Viu uma palavra mas esqueceu de salvar? O histórico de palavras pesquisadas está disponível para você!
+>[!NOTE]
+> Você pode baixar o apk do app [aqui](https://github.com/bidwolf/mobile-dictionary-codesh/releases/tag/v1.0.0)
 
 >  This is a challenge by [Coodesh](https://coodesh.com/)
+
+# Sumário
+- [Mobile Dictionary App](#mobile-dictionary-app)
+- [Sumário](#sumário)
+- [Layout proposto](#layout-proposto)
+- [Tecnologias utilizadas no desenvolvimento do app](#tecnologias-utilizadas-no-desenvolvimento-do-app)
+  - [Sobre as tecnologias](#sobre-as-tecnologias)
+- [Inicializando o projeto](#inicializando-o-projeto)
+  - [Passo 1: Instalar dependências do projeto](#passo-1-instalar-dependências-do-projeto)
+  - [Passo 2: Inicializar o Metro](#passo-2-inicializar-o-metro)
+  - [Passo 3: Build e execução do app](#passo-3-build-e-execução-do-app)
+    - [Android](#android)
+    - [iOS](#ios)
+      - [Setup do Cocoapods](#setup-do-cocoapods)
+      - [Inicialização do app localmente](#inicialização-do-app-localmente)
+      - [Execução em dispositivo físico](#execução-em-dispositivo-físico)
+- [Testes e2e](#testes-e2e)
 
 # Layout proposto
 
@@ -23,6 +42,7 @@ Utilizando como base o wireframe fornecido, foi desenvolvido um protótipo utili
 - [Async Storage](https://react-native-async-storage.github.io/async-storage/)
 - [date-fns](https://date-fns.org/)
 - [react-native-tts](https://github.com/ak1394/react-native-tts)
+
 ## Sobre as tecnologias
 
 O projeto foi desenvolvido utilizando o React Native, pois além de ser versátil e possuir uma comunidade muito ativa, permite a criação de aplicativos nativos para Android e IOS usando uma única base de código.
@@ -30,7 +50,7 @@ O uso de Typescript é uma escolha pessoal, pois tenho mesmo usando javascript d
 
 O Firebase foi utilizado para armazenar as palavras favoritas/histórico relacionadas ao usuário, além de fornecer autenticação social para o app que ajuda muito tanto no desenvolvimento quanto na experiência do usuário.
 
-A respeito do uso do Redux,flutua entre pessoal e requisito do projeto. Geralmente preciso de gerenciamento de estados  globais em meus projetos, quando preciso de algo mais simples, opto por utilizar o Context API do React, mas para projetos maiores, o Redux é uma escolha mais robusta. Porém, para este projeto, o Redux também foi utilizado para cachear resposta de requisições à API de dicionário via RTK Query.
+A respeito do uso do Redux, flutua entre pessoal e requisito do projeto. Geralmente preciso de gerenciamento de estados globais em meus projetos, quando preciso de algo mais simples, opto por utilizar o Context API do React, mas para projetos maiores, o Redux é uma escolha mais robusta. Porém, para este projeto, o Redux também foi utilizado para cachear resposta de requisições à API de dicionário via RTK Query.
 
 O Async Storage foi utilizado para armazenar informações locais do usuário, como o token de autenticação do Firebase, além de armazenar as palavras da lista de palavras do github em chunks de 1000 palavras pra evitar sobrecarga de memória.
 
@@ -62,7 +82,6 @@ yarn start
 
 ## Passo 3: Build e execução do app
 A depender do sistema operacional, você pode optar por efetuar o build e execução do app em um emulador ou dispositivo físico.
-
 
 ### Android
 A opção mais amplamente suportada é o uso do Android Studio para emular um dispositivo Android.
