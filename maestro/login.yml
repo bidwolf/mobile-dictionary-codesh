@@ -1,0 +1,7 @@
+# flow.yaml
+
+appId: com.mobiledictionary
+---
+- tapOn:
+    id: "com.google.android.gms:id/container"
+    index: 0

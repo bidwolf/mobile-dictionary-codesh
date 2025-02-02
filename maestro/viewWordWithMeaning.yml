@@ -1,0 +1,44 @@
+appId: com.mobiledictionary
+---
+- assertVisible: "Words"
+- assertVisible: "abacate"
+- scrollUntilVisible:
+    element: 
+      id: "aardvark"
+    direction: UP 
+    visibilityPercentage: 100
+    centerElement: true 
+- tapOn: "aardvark"
+- assertVisible: "aardvark"
+- assertVisible: "Meanings"
+- assertVisible:
+    id: "favoriteButton"
+    enabled: true
+- copyTextFrom:
+    id: "favoriteButton"
+- evalScript: ${output.addFavorite = maestro.copiedText}
+- tapOn:
+    id: "favoriteButton"
+
+- copyTextFrom:
+    id: "favoriteButton"
+- assertTrue: ${output.addFavorite !== maestro.copiedText}
+- assertVisible: "X"
+- tapOn: "X"
+- copyTextFrom:
+    text: "aardvark"
+- tapOn: 
+    id: "HomeScreen"
+- scrollUntilVisible:
+    element: 
+      text: "Deu um branco? Relembre a última palavra que você viu."
+    direction: DOWN 
+    visibilityPercentage: 100
+    centerElement: true 
+- assertVisible: "aardvark"
+- tapOn: 
+    id: ${maestro.copiedText+"-button"}
+- assertVisible: "aardvark"
+- assertVisible: "Meanings"
+- assertVisible: "X"
+- tapOn: "X"

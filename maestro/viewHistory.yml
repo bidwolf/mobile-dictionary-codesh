@@ -1,0 +1,11 @@
+# flow.yaml
+
+appId: com.mobiledictionary
+---
+- assertVisible: "Ver Histórico"
+- tapOn: "Ver Histórico"
+- assertVisible: "Histórico"
+- assertVisible: "History"
+- assertVisible: "Palavra"
+- assertVisible: "Visto em"
+- assertVisible: ${maestro.copiedText}

@@ -1,0 +1,19 @@
+appId: com.mobiledictionary
+---
+- tapOn: "Aumentar Vocabulário"
+- assertVisible: "Lista de palavras"
+- assertVisible: "Words"
+- assertVisible: "aaa"
+- scrollUntilVisible:
+    element: 
+      id: "abacate"
+    direction: DOWN 
+    visibilityPercentage: 100
+    centerElement: true 
+- tapOn: "abacate"
+- assertVisible: "abacate"
+- assertVisible:
+    id: "favoriteButton"
+    enabled: false
+- assertVisible: "X"
+- tapOn: "X"

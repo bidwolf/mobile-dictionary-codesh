@@ -1,0 +1,34 @@
+# flow.yaml
+
+appId: com.mobiledictionary
+---
+- launchApp
+- tapOn: "Login com Google"
+- runFlow:
+    when:
+      visible:
+        id: "com.google.android.gms:id/container"
+        index: 0
+    file: "login.yml"
+- assertVisible: "Olá Henrique Rodrigues !
+
+    O que deseja aprender hoje?"
+- assertVisible: Aumentar Vocabulário
+- runFlow:
+    when:
+      visible: "Aumentar Vocabulário"
+    file: "viewWordWithoutMeaning.yml"
+- runFlow:
+    when:
+      visible: "Lista de Palavras"
+    file: "viewWordWithMeaning.yml"
+- runFlow:
+    when:
+      visible: "Ver Histórico"
+    file: "viewHistory.yml"
+- tapOn: 
+    id: "WordsScreen"
+- runFlow:
+    when:
+      visible: "Lista de Palavras"
+    file: "favoritesFunctionality.yml" 

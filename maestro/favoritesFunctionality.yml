@@ -1,0 +1,71 @@
+# flow.yaml
+
+appId: com.mobiledictionary
+---
+- assertVisible: 
+    id: "searchButton"
+- tapOn:
+    id: "searchInput"
+- inputText: "awards"
+- hideKeyboard
+- tapOn: 
+    id: "searchButton"
+- assertVisible: "Lista de palavras"
+- tapOn: 
+    id: "awards"
+- assertVisible: "awards"
+- assertVisible: "Adicionar aos favoritos"
+- tapOn: 
+    id: "favoriteButton"
+- assertVisible: "Remover dos favoritos"
+- assertVisible: "X"
+- tapOn: "X"
+- assertVisible: "awards"
+- assertVisible: 
+    id: "FavoritesScreen"
+- tapOn: 
+    id: "FavoritesScreen"
+- assertVisible: "Favoritos"
+- assertVisible: "Palavra"
+- copyTextFrom:
+    text: "awards"
+    index: 0
+- assertVisible: "Fonética"
+- assertVisible:
+    id: ${maestro.copiedText+"-options"}
+    index: 0
+- tapOn:
+    id: ${maestro.copiedText+"-options"}
+    index: 0
+- assertVisible: "Ver Significado"
+- tapOn:
+    text: "Ver Significado"
+- assertVisible: ${maestro.copiedText}
+- assertVisible: "Meanings"
+- assertVisible: "Another Definitions"
+- assertVisible: "X"
+- tapOn: "X"
+- assertVisible: "Favoritos"
+- tapOn: 
+    id: ${maestro.copiedText+"-options"}
+    index: 0
+- assertVisible: "Remover dos Favoritos"
+- tapOn: 
+    text: "Remover dos Favoritos"
+- assertVisible: "Voltar"
+- assertVisible: "Excluir"
+- tapOn: "Voltar"
+- assertVisible: "Favoritos"
+
+- tapOn: 
+    id: ${maestro.copiedText+"-options"}
+    index: 0
+- assertVisible: "Remover dos Favoritos"
+- tapOn: 
+    text: "Remover dos Favoritos"
+- assertVisible: "Voltar"
+- assertVisible: "Excluir"
+- tapOn: "Excluir"
+- assertNotVisible: ${maestro.copiedText}
+- tapOn: 
+    id: "HomeScreen"
