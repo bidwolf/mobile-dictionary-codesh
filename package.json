@@ -2,6 +2,10 @@
   "name": "mobile-dictionary",
   "version": "0.0.1",
   "private": true,
+  "author": {
+    "name": "Henrique de Paula Rodrigues",
+    "url": "https://github.com/bidwolf"
+  },
   "scripts": {
     "android": "react-native run-android",
     "ios": "react-native run-ios",
