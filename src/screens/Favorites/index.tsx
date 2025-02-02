@@ -95,7 +95,7 @@ const FavoriteList = ({ favorites, handleRemoveFavorite, handleViewDetails }: Fa
               <Text style={styles.cell}>{item.phonetic}</Text>
               <FavoriteActionsMenu
                 trigger={
-                  <Icon name='ellipsis' testID='table-word-options' size={16} color={theme.colors.text} style={{ opacity: 0.5, }} iconStyle='solid' />
+                  <Icon name='ellipsis' testID={`${item.word}-options`} size={16} color={theme.colors.text} style={{ opacity: 0.5, }} iconStyle='solid' />
                 }
                 handleViewWordMeaning={() => handleViewDetails(item.word)}
                 handleRemoveFavorite={() => handleRemoveFavorite(item.word)}
